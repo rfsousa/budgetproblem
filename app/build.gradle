@@ -1,0 +1,26 @@
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
+    // implementation 'com.google.guava:guava:31.1-jre'
+    
+    implementation 'io.github.cdimascio:dotenv-java:2.2.3'
+}
+
+application {
+    mainClass = 'br.edu.ufpi.ccn036.budgetapp.Main'
+}
+
+shadowJar {
+   archiveBaseName.set('budgetapp')
+   archiveClassifier.set('')
+   archiveVersion.set('')
+}
