@@ -2,11 +2,19 @@ package br.edu.ufpi.ccn036.budgetapp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import br.edu.ufpi.ccn036.budgetapp.algorithms.Knapsack;
+import br.edu.ufpi.ccn036.budgetapp.algorithms.Knapsack.KnapsackItem;
 
 import javafx.application.Application;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -14,25 +22,71 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TableView.ResizeFeatures;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.util.Callback;
 import javafx.stage.Stage;
 
 public class App extends Application {
 	private static final String APP_NAME = "Atividade Prática";
+
+	private static class BudgetItem implements KnapsackItem {
+		// private String title;
+		// double weight, value;
+		private SimpleStringProperty title;
+		private SimpleDoubleProperty weight, value;
+		
+		public BudgetItem(String title, double weight, double value) {
+			this.title = new SimpleStringProperty(title);
+			this.weight = new SimpleDoubleProperty(weight);
+			this.value = new SimpleDoubleProperty(value);
+		}
+
+		@Override
+		public double getValue() {
+			return value.get();
+		}
+
+		@Override
+		public double getWeight() {
+			return weight.get();
+		}
+
+		public SimpleStringProperty getTitle() {
+			return title;
+		}
+		
+		public void setValue(double value) {
+			this.value = new SimpleDoubleProperty(value);
+		}
+
+		public void setWeight(double value) {
+			this.weight = new SimpleDoubleProperty(value);
+		}
+
+		public void setTitle(String value) {
+			this.title = new SimpleStringProperty(value);
+		}
+	}
 	
 	private Scene scene;
 	private Stage stage;
 	private File openFile;
 	
 	private boolean hasBeenModified = false;
+
+	private Knapsack knapsack = new Knapsack(0);
 
 	public void init(String[] args) {
 		Application.launch(args);
@@ -70,9 +124,9 @@ public class App extends Application {
 		});
 		
 		setupGUI();
-//		setupMenu();
+		setupMenu();
 //		setupLists();
-//		setupButtons();
+		setupButtons();
 	}
 	
 	private void setupGUI() {
@@ -81,34 +135,34 @@ public class App extends Application {
 		splitPane.lookupAll(".split-pane-divider").stream()
 			.forEach(div -> div.setMouseTransparent(true));
 		
-		TableView table = (TableView) scene.lookup("#itemTable");
-		table.columnResizePolicyProperty().set(false);
+		@SuppressWarnings("unchecked")
+		TableView<KnapsackItem> table = (TableView<KnapsackItem>) scene.lookup("#itemTable");
 		
 		// Esses campos de texto não devem ser alterados pelo usuário
-//		TextField lengthTextField = (TextField) scene.lookup("#lengthTextField");
-//		lengthTextField.setEditable(false);
-//		TextField quantityTextField = (TextField) scene.lookup("#quantityTextField");
-//		quantityTextField.setEditable(false);
-//		TextField depthnessTextField = (TextField) scene.lookup("#depthnessTextField");
-//		depthnessTextField.setEditable(false);
+		TextField quantityTextField = (TextField) scene.lookup("#quantityTextField");
+		quantityTextField.setEditable(false);
+		TextField costTextField = (TextField) scene.lookup("#ansCostTextField");
+		costTextField.setEditable(false);
+		TextField ansBenefitTextField = (TextField) scene.lookup("#ansBenefitTextField");
+		ansBenefitTextField.setEditable(false);
 //		TextField selectedTextField = (TextField) scene.lookup("#selectedTextField");
 //		selectedTextField.setEditable(false);
 //		TextField heightTextField = (TextField) scene.lookup("#heightTextField");
 //		heightTextField.setEditable(false);
 	}
 	
-//	private void setupMenu() {
-//		MenuBar menu = (MenuBar) scene.lookup("#menuBar");
-//		
-//		// Importar arquivo
+	private void setupMenu() {
+		MenuBar menu = (MenuBar) scene.lookup("#menuBar");
+		
+		// Importar arquivo
 //		menu.getMenus().get(0).getItems().get(0).setOnAction(evt -> importFile());
-//		// Exportar arquivo
+		// Exportar arquivo
 //		menu.getMenus().get(0).getItems().get(1).setOnAction(evt -> exportFile());
-//		// Sair
+		// Sair
 //		menu.getMenus().get(0).getItems().get(2).setOnAction(evt -> exit());
-//		// Sobre
-//		menu.getMenus().get(1).getItems().get(0).setOnAction(evt -> about());
-//	}
+		// Sobre
+		menu.getMenus().get(1).getItems().get(0).setOnAction(evt -> about());
+	}
 //	
 //	private void setupLists() {
 //		TextField selectedTextField = (TextField) scene.lookup("#selectedTextField");
@@ -143,28 +197,34 @@ public class App extends Application {
 //		
 //	}
 //	
-//	private void setupButtons() {
-//		TextField nameTextField = (TextField) scene.lookup("#nameTextField");
-//		
-//		Button addButton = (Button) scene.lookup("#addButton");
-//		addButton.setOnAction(evt -> {
-//			String name = nameTextField.getText();
+	private void setupButtons() {
+		TextField nameTextField = (TextField) scene.lookup("#titleTextField");
+		TextField costTextField = (TextField) scene.lookup("#costTextField");
+		TextField benefitTextField = (TextField) scene.lookup("#benefitTextField");
+		
+		Button addButton = (Button) scene.lookup("#addButton");
+		addButton.setOnAction(evt -> {
+			String name = nameTextField.getText();
+			double cost = Double.parseDouble(costTextField.getText()),
+				   benefit = Double.parseDouble(benefitTextField.getText());
 //			if(!(name.length() > 0)) return;
-//			if(people.search(name) == null) {
-//				names.add(name);
-//				people.insert(name);
-//				updateLists();
-//				updateFields();
-//				hasBeenModified = true;
-//			}
-//		});
-//		
-//		Button removeButton = (Button) scene.lookup("#removeButton");
-//		removeButton.setOnAction(evt -> {
-//			String name = nameTextField.getText();
-//			if(names.remove(name)) initTree();
-//		});
-//	}
+			knapsack.addBudgetItem(new BudgetItem(name, cost, benefit));
+			System.out.println(knapsack.getItems().size());
+			updateLists();
+		});
+		
+		Button changeButton = (Button) scene.lookup("#changeButton");
+		changeButton.setOnAction(evt -> {
+			double budget = Double.parseDouble(nameTextField.getText());
+			knapsack.setCapacity(budget);
+		});
+
+		// Button removeButton = (Button) scene.lookup("#removeButton");
+		// removeButton.setOnAction(evt -> {
+		// 	String name = nameTextField.getText();
+		// 	if(names.remove(name)) initTree();
+		// });
+	}
 //	
 //	private void importFile() {
 //		if(hasBeenModified) {
@@ -232,14 +292,14 @@ public class App extends Application {
 //		System.exit(0);
 //	}
 //	
-//	private void about() {
-//		Alert info = new Alert(AlertType.INFORMATION,
-//				"UFPI - DC/CCN022 - Esturutras de Dados\n"
-//				+ "Grupo 02, Árvore de Busca Binária\n"
-//				+ "Atividade Prática 03");
-//		info.setTitle("Sobre");
-//		info.showAndWait();
-//	}
+	private void about() {
+		Alert info = new Alert(AlertType.INFORMATION,
+				"UFPI - DC/CCN036 - Projeto e Análise de Algoritmos\n"
+				+ "Problema do Orçamento com base no Problema da Mochila Binária\n"
+				+ "Atividade Principal");
+		info.setTitle("Sobre");
+		info.showAndWait();
+	}
 //	
 //	private void initTree() {
 //		people = new BinarySearchTree<>();
@@ -256,22 +316,38 @@ public class App extends Application {
 //		TextField heightTextField = (TextField) scene.lookup("#heightTextField");
 //		heightTextField.setText(String.valueOf(people.height()));
 //	}
-//	
-//	private void updateLists() {
-//		updateList("#preorderList", bst -> bst.preorderList());
-//		updateList("#inorderList", bst -> bst.inorderList());
-//		updateList("#postorderList", bst -> bst.postorderList());
-//	}
-//	
-//	private void updateList(String list, Function<BinarySearchTree<String>, List<String>> method) {
-//		@SuppressWarnings("unchecked")
-//		ListView<String> listView = (ListView<String>) scene.lookup(list);
-//		ObservableList<String> itemList = FXCollections.observableArrayList();
-//		
-//		List<String> namesList = method.apply(people);
-//		namesList.stream().forEach(itemList::add);
-//		
-//		listView.setItems(itemList);
-//	}
+	// Basta chamar knapsack.solve para obter um vetor com a melhor solução
+	private void updateLists() {
+		updateList("#itemTable", knapsack.getItems().stream().map(x -> (BudgetItem) x).collect(Collectors.toList()));
+		updateList("#solutionTable", knapsack.solve().stream().map(x -> (BudgetItem) x).collect(Collectors.toList())); // O(2^n)
+		// updateList("#preorderList", bst -> bst.preorderList());
+		// updateList("#inorderList", bst -> bst.inorderList());
+		// updateList("#postorderList", bst -> bst.postorderList());
+	}
+	
+	// // private void updateList(String list, Function<BinarySearchTree<String>, List<String>> method) {
+	private void updateList(String list, List<BudgetItem> items) {
+
+		@SuppressWarnings("unchecked")
+		// pega os dados da intefacex
+		TableView<BudgetItem> table = (TableView<BudgetItem>) scene.lookup(list);
+		var cols = table.getColumns();
+		cols.get(0).setCellValueFactory((Callback) new Callback<CellDataFeatures<BudgetItem, String>, ObservableValue<String>>() {
+		     public ObservableValue<String> call(CellDataFeatures<BudgetItem, String> p) {
+		         // p.getValue() returns the Person instance for a particular TableView row
+		         return p.getValue().getValue().getTitle();
+		     }
+		  });
+		// ListView<String> listView = (ListView<String>) scene.lookup(list); 
+		// passa os dados para uma estrutura
+		// final ObservableList<KnapsackItem> data = FXCollections.observableArrayList(
+		// 	new KnapsackItem("");
+		// );
+		ObservableList<BudgetItem> itemList = FXCollections.observableArrayList();  
+		
+		// List<String> namesList = method.apply(people);
+		items.stream().forEach(itemList::add);
+		table.setItems(itemList);
+	}
 	
 }

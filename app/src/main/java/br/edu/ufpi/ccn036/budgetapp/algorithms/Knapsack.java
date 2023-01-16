@@ -1,4 +1,4 @@
-package br.edu.ufpi.ccn036.budgetapp;
+package br.edu.ufpi.ccn036.budgetapp.algorithms;
 
 import java.util.ArrayList;
 
@@ -27,6 +27,10 @@ public class Knapsack {
 	public KnapsackItem getBudgetItem(int index) {
 		return items.get(index);
 	}
+
+	public ArrayList<KnapsackItem> getItems() {
+		return items;
+	}
 	
 	public void setCapacity(double budget) {
 		this.capacity = budget;
@@ -45,12 +49,12 @@ public class Knapsack {
 			search(k + 1);
 			var item = items.get(k);
 			subset.add(item);
-			currValue += item.value();
-			currWeight += item.weight();
+			currValue += item.getValue();
+			currWeight += item.getWeight();
 			search(k + 1);
 			subset.remove(subset.size() - 1);
-			currValue -= item.value();
-			currWeight -= item.weight();
+			currValue -= item.getValue();
+			currWeight -= item.getWeight();
 		}
 	}
 	
@@ -79,8 +83,8 @@ public class Knapsack {
 	}
 	
 	public static interface KnapsackItem {
-		public double value();
-		public double weight();
+		public double getValue();
+		public double getWeight();
 	}
 	
 }

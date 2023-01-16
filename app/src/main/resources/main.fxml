@@ -38,7 +38,7 @@
                      <Text layoutX="32.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Adicionar Despesa" />
                   <TextField id="titleTextField" layoutX="6.0" layoutY="31.0" promptText="Título" />
                      <TextField id="costTextField" layoutX="6.0" layoutY="61.0" promptText="Custo" />
-                     <TextField id="costTextField" layoutX="6.0" layoutY="92.0" promptText="Benefício" />
+                     <TextField id="benefitTextField" layoutX="6.0" layoutY="92.0" promptText="Benefício" />
                   <Button id="addButton" layoutX="6.0" layoutY="126.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Adicionar" />
                   </children>
                </AnchorPane>
@@ -48,13 +48,13 @@
                      <Text layoutX="12.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nº de Itens:" textAlignment="RIGHT" wrappingWidth="70.716796875" />
                      <TextField id="quantityTextField" layoutX="86.0" layoutY="26.0" prefHeight="0.0" prefWidth="68.0" />
                      <Text layoutX="12.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Custo Total:" textAlignment="RIGHT" wrappingWidth="70.716796875" />
-                     <TextField id="quantityTextField" layoutX="86.0" layoutY="55.0" prefHeight="0.0" prefWidth="68.0" />
+                     <TextField id="ansCostTextField" layoutX="86.0" layoutY="55.0" prefHeight="0.0" prefWidth="68.0" />
                      <Text layoutX="12.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benefício:" textAlignment="RIGHT" wrappingWidth="70.716796875" />
-                     <TextField id="heightTextField" layoutX="86.0" layoutY="86.0" prefHeight="0.0" prefWidth="68.0" />
+                     <TextField id="ansBenefitTextField" layoutX="86.0" layoutY="86.0" prefHeight="0.0" prefWidth="68.0" />
                   </children>
                </AnchorPane>
             <TextField id="selectedItemField" layoutX="8.0" layoutY="307.0" prefHeight="25.0" prefWidth="88.0" promptText="Orçamento" />
-               <Button id="removeButton" layoutX="101.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Alterar" />
+               <Button id="changeButton" layoutX="101.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Alterar" />
             <Button id="removeButton" layoutX="8.0" layoutY="366.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="Remover Despesa" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
@@ -62,11 +62,11 @@
             <Text layoutX="86.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Despesas" />
                <ScrollPane layoutX="14.0" layoutY="23.0" prefHeight="360.0" prefWidth="193.0">
                   <content>
-                     <TableView id="itemTable" prefHeight="357.0" prefWidth="191.0">
+                     <TableView fx:id="itemTable" prefHeight="357.0" prefWidth="191.0">
                        <columns>
-                         <TableColumn minWidth="0.0" prefWidth="84.0" resizable="false" text="Título" />
-                         <TableColumn prefWidth="43.0" resizable="false" text="Custo" />
-                           <TableColumn prefWidth="62.0" resizable="false" text="Benefício" />
+                         <TableColumn fx:id="title" minWidth="0.0" prefWidth="84.0" resizable="false" text="Título" />
+                         <TableColumn fx:id="weight" prefWidth="43.0" resizable="false" text="Custo" />
+                           <TableColumn fx:id="value" prefWidth="62.0" resizable="false" text="Benefício" />
                        </columns>
                      </TableView>
                   </content>
@@ -74,11 +74,11 @@
             <Text layoutX="250.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Melhor Configuração" />
                <ScrollPane layoutX="209.0" layoutY="23.0" prefHeight="360.0" prefWidth="193.0">
                   <content>
-                     <TableView id="solutionTable" prefHeight="357.0" prefWidth="191.0">
+                     <TableView fx:id="solutionTable" prefHeight="357.0" prefWidth="191.0">
                         <columns>
-                           <TableColumn minWidth="0.0" prefWidth="84.0" resizable="false" text="Título" />
-                           <TableColumn prefWidth="43.0" resizable="false" text="Custo" />
-                           <TableColumn prefWidth="62.0" resizable="false" text="Benefício" />
+                           <TableColumn fx:id="ansTitle" minWidth="0.0" prefWidth="84.0" resizable="false" text="Título" />
+                           <TableColumn fx:id="ansWeight" prefWidth="43.0" resizable="false" text="Custo" />
+                           <TableColumn fx:id="ansValue" prefWidth="62.0" resizable="false" text="Benefício" />
                         </columns>
                      </TableView>
                   </content>
