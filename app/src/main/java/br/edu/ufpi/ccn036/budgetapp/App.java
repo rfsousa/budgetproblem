@@ -41,42 +41,42 @@ import javafx.stage.Stage;
 public class App extends Application {
 	private static final String APP_NAME = "Atividade Prática";
 
-	private static class BudgetItem implements KnapsackItem {
+	public static class BudgetItem implements KnapsackItem {
 		// private String title;
 		// double weight, value;
-		private SimpleStringProperty title;
-		private SimpleDoubleProperty weight, value;
+		private String title;
+		private double weight, value;
 		
 		public BudgetItem(String title, double weight, double value) {
-			this.title = new SimpleStringProperty(title);
-			this.weight = new SimpleDoubleProperty(weight);
-			this.value = new SimpleDoubleProperty(value);
+			this.title = title;
+			this.weight = weight;
+			this.value = value;
 		}
 
 		@Override
 		public double getValue() {
-			return value.get();
+			return value;
 		}
 
 		@Override
 		public double getWeight() {
-			return weight.get();
+			return weight;
 		}
 
-		public SimpleStringProperty getTitle() {
+		public String getTitle() {
 			return title;
 		}
 		
 		public void setValue(double value) {
-			this.value = new SimpleDoubleProperty(value);
+			this.value = value;
 		}
 
 		public void setWeight(double value) {
-			this.weight = new SimpleDoubleProperty(value);
+			this.weight = value;
 		}
 
 		public void setTitle(String value) {
-			this.title = new SimpleStringProperty(value);
+			this.title = value;
 		}
 	}
 	
@@ -331,23 +331,21 @@ public class App extends Application {
 		@SuppressWarnings("unchecked")
 		// pega os dados da intefacex
 		TableView<BudgetItem> table = (TableView<BudgetItem>) scene.lookup(list);
+		
 		var cols = table.getColumns();
-		cols.get(0).setCellValueFactory((Callback) new Callback<CellDataFeatures<BudgetItem, String>, ObservableValue<String>>() {
-		     public ObservableValue<String> call(CellDataFeatures<BudgetItem, String> p) {
-		         // p.getValue() returns the Person instance for a particular TableView row
-		         return p.getValue().getValue().getTitle();
-		     }
-		  });
+//		cols.get(0).setCellFactory(new PropertyValueFactory<BudgetItem, String>(""));
+		
 		// ListView<String> listView = (ListView<String>) scene.lookup(list); 
 		// passa os dados para uma estrutura
-		// final ObservableList<KnapsackItem> data = FXCollections.observableArrayList(
-		// 	new KnapsackItem("");
-		// );
+//		final ObservableList<KnapsackItem> data = FXCollections.observableArrayList(
+//			new KnapsackItem("");
+//		);
 		ObservableList<BudgetItem> itemList = FXCollections.observableArrayList();  
 		
 		// List<String> namesList = method.apply(people);
 		items.stream().forEach(itemList::add);
 		table.setItems(itemList);
+		table.refresh();
 	}
 	
 }

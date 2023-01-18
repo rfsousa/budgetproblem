@@ -11,6 +11,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
+<?import javafx.collections.*?> 
+<?import javafx.geometry.Insets?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<?import fxmltableview.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <MenuBar id="menuBar">
@@ -64,9 +72,21 @@
                   <content>
                      <TableView fx:id="itemTable" prefHeight="357.0" prefWidth="191.0">
                        <columns>
-                         <TableColumn fx:id="title" minWidth="0.0" prefWidth="84.0" resizable="false" text="Título" />
-                         <TableColumn fx:id="weight" prefWidth="43.0" resizable="false" text="Custo" />
-                           <TableColumn fx:id="value" prefWidth="62.0" resizable="false" text="Benefício" />
+                         <TableColumn fx:id="title" minWidth="0.0" prefWidth="84.0" resizable="false" text="Título">
+                         	<cellValueFactory>
+                      			<PropertyValueFactory property="Title" />
+                  			</cellValueFactory>
+                         </TableColumn>
+                         <TableColumn fx:id="weight" prefWidth="43.0" resizable="false" text="Custo">
+                         	<cellValueFactory>
+                      			<PropertyValueFactory property="Weight" />
+                  			</cellValueFactory>
+                         </TableColumn>
+                           <TableColumn fx:id="value" prefWidth="62.0" resizable="false" text="Benefício" >
+	                           <cellValueFactory>
+	                      			<PropertyValueFactory property="Value" />
+	                  			</cellValueFactory>
+                         </TableColumn>
                        </columns>
                      </TableView>
                   </content>
