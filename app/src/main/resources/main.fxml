@@ -9,16 +9,9 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
-<?import javafx.collections.*?> 
-<?import javafx.geometry.Insets?>
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.*?>
-<?import javafx.scene.layout.*?>
-<?import fxmltableview.*?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <MenuBar id="menuBar">
@@ -54,16 +47,17 @@
                   <children>
                      <Text layoutX="38.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dados da Solução" />
                      <Text layoutX="12.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nº de Itens:" textAlignment="RIGHT" wrappingWidth="70.716796875" />
-                     <TextField id="quantityTextField" layoutX="86.0" layoutY="26.0" prefHeight="0.0" prefWidth="68.0" />
+                     <TextField id="ansQuantityTextField" layoutX="86.0" layoutY="26.0" prefHeight="0.0" prefWidth="68.0" />
                      <Text layoutX="12.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Custo Total:" textAlignment="RIGHT" wrappingWidth="70.716796875" />
                      <TextField id="ansCostTextField" layoutX="86.0" layoutY="55.0" prefHeight="0.0" prefWidth="68.0" />
                      <Text layoutX="12.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benefício:" textAlignment="RIGHT" wrappingWidth="70.716796875" />
                      <TextField id="ansBenefitTextField" layoutX="86.0" layoutY="86.0" prefHeight="0.0" prefWidth="68.0" />
                   </children>
                </AnchorPane>
-            <TextField id="selectedItemField" layoutX="8.0" layoutY="307.0" prefHeight="25.0" prefWidth="88.0" promptText="Orçamento" />
+            <TextField id="budgetTextField" layoutX="8.0" layoutY="307.0" prefHeight="25.0" prefWidth="88.0" promptText="Orçamento" />
                <Button id="changeButton" layoutX="101.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="68.0" text="Alterar" />
             <Button id="removeButton" layoutX="8.0" layoutY="366.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="Remover Despesa" />
+               <Button id="solveButton" layoutX="8.0" layoutY="337.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="161.0" text="Resolver" />
          </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
@@ -82,7 +76,7 @@
                       			<PropertyValueFactory property="Weight" />
                   			</cellValueFactory>
                          </TableColumn>
-                           <TableColumn fx:id="value" prefWidth="62.0" resizable="false" text="Benefício" >
+                           <TableColumn fx:id="value" prefWidth="62.0" resizable="false" text="Benefício">
 	                           <cellValueFactory>
 	                      			<PropertyValueFactory property="Value" />
 	                  			</cellValueFactory>
@@ -91,14 +85,26 @@
                      </TableView>
                   </content>
                </ScrollPane>
-            <Text layoutX="250.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Melhor Configuração" />
+            <Text layoutX="285.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Solução" />
                <ScrollPane layoutX="209.0" layoutY="23.0" prefHeight="360.0" prefWidth="193.0">
                   <content>
                      <TableView fx:id="solutionTable" prefHeight="357.0" prefWidth="191.0">
                         <columns>
-                           <TableColumn fx:id="ansTitle" minWidth="0.0" prefWidth="84.0" resizable="false" text="Título" />
-                           <TableColumn fx:id="ansWeight" prefWidth="43.0" resizable="false" text="Custo" />
-                           <TableColumn fx:id="ansValue" prefWidth="62.0" resizable="false" text="Benefício" />
+                           <TableColumn fx:id="ansTitle" minWidth="0.0" prefWidth="84.0" resizable="false" text="Título">
+                           		<cellValueFactory>
+                      				<PropertyValueFactory property="Title" />
+                  				</cellValueFactory>
+                           </TableColumn>
+                           <TableColumn fx:id="ansWeight" prefWidth="43.0" resizable="false" text="Custo">
+                           		<cellValueFactory>
+                      				<PropertyValueFactory property="Weight" />
+                  				</cellValueFactory>
+                           </TableColumn>
+                           <TableColumn fx:id="ansValue" prefWidth="62.0" resizable="false" text="Benefício">
+                           		<cellValueFactory>
+                      				<PropertyValueFactory property="Value" />
+                  				</cellValueFactory>
+                           </TableColumn>
                         </columns>
                      </TableView>
                   </content>

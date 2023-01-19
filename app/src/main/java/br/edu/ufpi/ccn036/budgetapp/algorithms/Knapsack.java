@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Knapsack {
 	private double capacity, currValue = 0, currWeight = 0, best = 0;
 	private ArrayList<KnapsackItem> items, solution, subset;
-	private boolean saved = false;
+	private boolean saved = false, enableMemoization = true;
 	
 	public Knapsack(double budget) {
 		this.capacity = budget;
@@ -58,12 +58,18 @@ public class Knapsack {
 		}
 	}
 	
+	public Knapsack toggleMemoization() {
+		enableMemoization = !enableMemoization;
+		return this;
+	}
+	
 	public ArrayList<KnapsackItem> solve() {
+		best = 0;
 		return solve(Algorithm.COMPLETE_SEARCH);
 	}
 	
 	public ArrayList<KnapsackItem> solve(Algorithm algo) {
-		if(saved) return solution;
+		if(saved && enableMemoization) return solution;
 		
 		switch(algo) {
 		case COMPLETE_SEARCH:
