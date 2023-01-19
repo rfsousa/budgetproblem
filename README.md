@@ -8,7 +8,7 @@ Trata-se de escolher um problema NP-completo e modelar uma aplicação real dest
 
 ## Implementação
 
-O algoritmo de força bruta (_complete search_) está descrito no artigo. A interface gráfica está implementada em JavaFX e cria uma instância da mochila, que é representada por uma classe  _Knapsack_ e a gerencia por meio de interações com os botões e utiliza os dados para preencher as tabelas que demonstram os itens que podem ser escolhidos e a solução ótima. A classe  _Knapsack_ , como foi implementada, permite que seja reutilizada por outros programas, por ser uma abstração.
+O algoritmo de força bruta (_complete search_) está descrito no artigo. A interface gráfica está implementada em JavaFX e cria uma instância da mochila, que é representada por uma classe [´Knapsack´](https://github.com/rfsousa/budgetproblem/blob/main/app/src/main/java/br/edu/ufpi/ccn036/budgetapp/algorithms/Knapsack.java) e a gerencia por meio de interações com os botões e utiliza os dados para preencher as tabelas que demonstram os itens que podem ser escolhidos e a solução ótima. A classe _Knapsack_, como foi implementada, permite que seja reutilizada por outros programas, por ser uma abstração.
 
 ## To-do list
 
