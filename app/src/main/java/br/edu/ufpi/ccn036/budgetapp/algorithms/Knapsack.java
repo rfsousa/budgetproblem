@@ -117,6 +117,7 @@ public class Knapsack {
 	
 	public ArrayList<KnapsackItem> solve() {
 		best = 0;
+		subset = new ArrayList<>();
 		return solve(Algorithm.COMPLETE_SEARCH);
 	}
 	

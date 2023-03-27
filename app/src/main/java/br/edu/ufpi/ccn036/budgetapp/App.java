@@ -130,11 +130,24 @@ public class App extends Application {
 			ansBenefitTextField.setText(String.valueOf(totalBenefit));
 		});
 
-		// Button removeButton = (Button) scene.lookup("#removeButton");
-		// removeButton.setOnAction(evt -> {
-		// 	String name = nameTextField.getText();
-		// 	if(names.remove(name)) initTree();
-		// });
+		 Button removeButton = (Button) scene.lookup("#removeButton");
+		 removeButton.setOnMouseClicked(evt -> {
+			try {
+				removeUpdate("#itemTable");
+				var solution = knapsack.solve();
+				double totalCost = solution.stream().mapToDouble(x -> x.getWeight()).sum(),
+						totalBenefit = solution.stream().mapToDouble(x -> x.getValue()).sum();
+				updateSolution("#solutionTable", solution.stream().map(x -> (BudgetItem) x).collect(Collectors.toList()));
+				ansQuantityTextField.setText(String.valueOf(solution.size()));
+				ansCostTextField.setText(String.valueOf(totalCost));
+				ansBenefitTextField.setText(String.valueOf(totalBenefit));
+				System.out.println("tam. sol: " + solution.size() + " tam. itens: " + knapsack.getItems().size());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		 });
 	}
 	
 	private void about() {
@@ -151,6 +164,23 @@ public class App extends Application {
 		TableView<BudgetItem> table = (TableView<BudgetItem>) scene.lookup(list);
 		ObservableList<BudgetItem> itemList = FXCollections.observableArrayList();
 		items.stream().forEach(itemList::add);
+		table.setItems(itemList);
+		table.refresh();
+	}
+	
+	private void removeUpdate(String list){
+		@SuppressWarnings("unchecked")
+		TableView<BudgetItem> table = (TableView<BudgetItem>) scene.lookup(list);
+		int selected = table.getSelectionModel().getSelectedIndex();
+		System.out.println("selected: " + selected);
+		try{
+			knapsack.remove(selected);
+		}catch (Exception e){
+			e.printStackTrace();
+		};
+		List<BudgetItem> items = knapsack.getItems().stream().map(x -> (BudgetItem) x).collect(Collectors.toList());
+		ObservableList<BudgetItem> itemList = FXCollections.observableArrayList();
+		items.forEach(itemList::add);
 		table.setItems(itemList);
 		table.refresh();
 	}
