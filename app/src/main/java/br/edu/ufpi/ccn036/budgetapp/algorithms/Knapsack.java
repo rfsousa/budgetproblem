@@ -42,7 +42,7 @@ public class Knapsack {
 	private void search(int k) {
 		if(k == items.size()) {
 			if(currWeight <= capacity) {
-				if(best < currValue) {
+				if(best <= currValue) {
 					solution = new ArrayList<>(subset);
 					best = currValue;
 				}
@@ -116,8 +116,7 @@ public class Knapsack {
 	}
 	
 	public ArrayList<KnapsackItem> solve() {
-		best = 0;
-		subset = new ArrayList<>();
+		best = currValue = 0;
 		return solve(Algorithm.COMPLETE_SEARCH);
 	}
 	
