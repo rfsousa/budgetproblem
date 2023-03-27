@@ -1,8 +1,8 @@
 package br.edu.ufpi.ccn036.budgetapp;
 
-import br.edu.ufpi.ccn036.budgetapp.algorithms.Knapsack.KnapsackItem;
+import br.edu.ufpi.ccn036.budgetapp.algorithms.Knapsack.IKnapsackItem;
 
-public class BudgetItem implements KnapsackItem {
+public class BudgetItem implements IKnapsackItem {
 	private String title;
 	private double weight, value;
 	
